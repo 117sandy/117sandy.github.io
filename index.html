@@ -67,6 +67,7 @@
             zh: "將米色的油皮壓扁桿圓，包入綠色油酥並收口捏緊。", 
             en: "Flatten the beige water-oil dough, place a portion of the green oil dough inside, and pinch the opening tightly to seal." 
           },
+          image: "step1.jpg",
           video: "https://www.youtube.com/embed/EbVN3AhQARM?start=362&end=391"
         },
         { 
@@ -84,6 +85,7 @@
             zh: "拿出包好的麵團，收口面朝上壓扁並桿成橢圓形/長方形，手放在短邊沿著長邊捲起來", 
             en: "Take the dough and place the wrapping side up, flatten into oval/rectengular shape, take the short edge and roll along the long edge" 
           },
+          image: "step3.jpg",
           video: "https://www.youtube.com/embed/EbVN3AhQARM?start=400&end=430"
         },
         { 
@@ -97,9 +99,10 @@
         { 
           title: { zh: "步驟五：第二次擀捲", en: "Step 5: Second Roll" },
           content: { 
-            zh: "再次按扁並從中間向兩端擀長，把麵團桿長不桿寬，再沿著長邊捲成短胖條", 
+            zh: "再次按扁並從中間向兩端擀長，把麵團桿長不桿寬再沿著長邊捲成短胖條", 
             en: "Flatten again, roll out from the center to both ends (make the dough longer not wider), and roll it up. Finished roll will be short and thick." 
           },
+          image: "step5.jpg",
           video: "https://www.youtube.com/embed/EbVN3AhQARM?start=430&end=480"
         },
         { 
@@ -108,6 +111,7 @@
             zh: "接著從中間一刀切開，就能看到清晰的螺旋紋！切面的漂亮螺紋朝下，壓扁包入內餡即可烘烤，包餡料時漂亮的螺紋面朝外。", 
             en: "Cut it in half from the middle to reveal the clear spiral pattern! Cut side facing down and flatten it, wrap the filling, make sure the spiral side is showing outward after wrapping. Ready to bake!" 
           },
+          image: "step6.jpg",
           video: "https://www.youtube.com/embed/EbVN3AhQARM?start=480&end=570"
         }
       ];
@@ -133,7 +137,17 @@
               {steps[currentStep].content[lang]}
             </p>
 
-            {/* 計時器移到影片上方 */}
+            {/* ✨ 顯示手繪圖片區塊 ✨ */}
+            {steps[currentStep].image && (
+              <div style={{ marginTop: '15px' }}>
+                <img 
+                  src={steps[currentStep].image} 
+                  alt="Step Illustration" 
+                  style={{ width: '100%', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }} 
+                />
+              </div>
+            )}
+
             {steps[currentStep].hasTimer && (
               <div style={{ textAlign: 'center', margin: '25px 0', padding: '20px', backgroundColor: '#e9f5ec', borderRadius: '8px' }}>
                 <div style={{ fontSize: '42px', fontWeight: 'bold', color: '#4a7c59', fontFamily: 'monospace' }}>
@@ -150,7 +164,6 @@
               </div>
             )}
 
-            {/* 影片移到計時器下方 */}
             {steps[currentStep].video && (
               <div style={{ marginTop: '15px', position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden", borderRadius: "8px", boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
                 <iframe 

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>抹茶千層酥互動食譜 / Matcha Pastry Recipe</title>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body style="background-color: #f4f9f4; margin: 0; padding: 20px; font-family: sans-serif;">
+  <div id="root"></div>
+  
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function App() {
+      const [currentStep, setCurrentStep] = useState(0);
+      const [timeLeft, setTimeLeft] = useState(600);
+      const [isTimerRunning, setIsTimerRunning] = useState(false);
+      const [lang, setLang] = useState('zh'); 
+
+      const ui = {
+        zh: {
+          title: "🍵 抹茶千層酥互動食譜",
+          switchBtn: "🌐 Switch to English",
+          timerAlert: "⏰ 時間到囉！",
+          start: "開始計時",
+          pause: "暫停",
+          reset: "重置",
+          prev: "⬅️ 上一步",
+          next: "下一步 ➡️"
+        },
+        en: {
+          title: "🍵 Matcha Pastry Interactive Recipe",
+          switchBtn: "🌐 切換為中文",
+          timerAlert: "⏰ Time is up!",
+          start: "Start",
+          pause: "Pause",
+          reset: "Reset",
+          prev: "⬅️ Previous",
+          next: "Next ➡️"
+        }
+      };
+
+      useEffect(() => {
+        let timer;
+        if (isTimerRunning && timeLeft > 0) {
+          timer = setInterval(() => setTimeLeft((prev) => prev - 1), 1000);
+        } else if (timeLeft === 0) {
+          setIsTimerRunning(false);
+          alert(ui[lang].timerAlert);
+        }
+        return () => clearInterval(timer);
+      }, [isTimerRunning, timeLeft, lang]);
+
+      const formatTime = (seconds) => {
+        const m = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const s = (seconds % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+      };
+
+      const steps = [
+        { 
+          title: { zh: "步驟一：包酥", en: "Step 1: Wrapping" },
+          content: { 
+            zh: "將米色的油皮壓扁桿圓，包入綠色油酥並收口捏緊。", 
+            en: "Flatten the beige water-oil dough, place a portion of the green oil dough inside, and pinch the opening tightly to seal." 
+          },
+          video: "https://www.youtube.com/embed/EbVN3AhQARM?start=362&end=391"
+        },
+        { 
+          title: { zh: "步驟二：麵團醒麵 ⏳ 你準備餡料", en: "Step 2: Dough Resting ⏳ You prepare filling" },
+          content: { 
+            zh: "計時十分鐘，同時準備(一人兩顆) 一顆餡料: 取20克麻糬與20克紅豆泥，將麻糬包入紅豆泥。", 
+            en: "Set timer for 10 minute and start (Two pcs per person) one filling: Take mochi 20g and redbean 20g, wrap mochi with red bean paste" 
+          },
+          video: "https://www.youtube.com/embed/EbVN3AhQARM?start=270&end=310",
+          hasTimer: true
+        },
+        { 
+          title: { zh: "步驟三：第一次桿捲", en: "Step 3: First Roll" },
+          content: { 
+            zh: "拿出包好的麵團，收口面朝上壓扁並桿成橢圓形/長方形，手放在短邊沿著長邊捲起來", 
+            en: "Take the dough and place the wrapping side up, flatten into oval/rectengular shape, take the short edge and roll along the long edge" 
+          },
+          video: "https://www.youtube.com/embed/EbVN3AhQARM?start=400&end=430"
+        },
+        { 
+          title: { zh: "步驟四：麵棍醒麵 ⏳ ", en: "Step 4: Dough Stick Resting ⏳" },
+          content: { 
+            zh: "計時十分鐘，喝點飲料聊聊天", 
+            en: "Set timer for 10 minute, grab a drink and comeback" 
+          },
+          hasTimer: true
+        },
+        { 
+          title: { zh: "步驟五：第二次擀捲", en: "Step 5: Second Roll" },
+          content: { 
+            zh: "再次按扁並從中間向兩端擀長，把麵團桿長不桿寬，再沿著長邊捲成短胖條", 
+            en: "Flatten again, roll out from the center to both ends (make the dough longer not wider), and roll it up. Finished roll will be short and thick." 
+          },
+          video: "https://www.youtube.com/embed/EbVN3AhQARM?start=430&end=480"
+        },
+        { 
+          title: { zh: "步驟六：切開，包好，進烤箱 ", en: "Step 6: Cut, Wrap, and Bake" },
+          content: { 
+            zh: "接著從中間一刀切開，就能看到清晰的螺旋紋！切面的漂亮螺紋朝下，壓扁包入內餡即可烘烤，包餡料時漂亮的螺紋面朝外。", 
+            en: "Cut it in half from the middle to reveal the clear spiral pattern! Cut side facing down and flatten it, wrap the filling, make sure the spiral side is showing outward after wrapping. Ready to bake!" 
+          },
+          video: "https://www.youtube.com/embed/EbVN3AhQARM?start=480&end=570"
+        }
+      ];
+
+      return (
+        <div style={{ maxWidth: '500px', margin: '0 auto', position: 'relative' }}>
+          <button 
+            onClick={() => setLang(lang === 'zh' ? 'en' : 'zh')}
+            style={{ position: 'absolute', top: '0', right: '0', padding: '8px 12px', backgroundColor: '#e9f5ec', color: '#2c5e3b', border: '1px solid #c3e6cb', borderRadius: '20px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}
+          >
+            {ui[lang].switchBtn}
+          </button>
+
+          <h1 style={{ color: '#4a7c59', textAlign: 'center', paddingTop: '50px', marginTop: '0' }}>
+            {ui[lang].title}
+          </h1>
+          
+          <div style={{ backgroundColor: 'white', padding: '25px', borderRadius: '12px', boxShadow: '0 4px 10px rgba(0,0,0,0.05)', marginTop: '20px' }}>
+            <h2 style={{ color: '#2c5e3b', marginTop: 0, borderBottom: '2px solid #e9f5ec', paddingBottom: '10px' }}>
+              {steps[currentStep].title[lang]}
+            </h2>
+            <p style={{ fontSize: '16px', lineHeight: '1.6', color: '#444' }}>
+              {steps[currentStep].content[lang]}
+            </p>
+
+            {/* 計時器移到影片上方 */}
+            {steps[currentStep].hasTimer && (
+              <div style={{ textAlign: 'center', margin: '25px 0', padding: '20px', backgroundColor: '#e9f5ec', borderRadius: '8px' }}>
+                <div style={{ fontSize: '42px', fontWeight: 'bold', color: '#4a7c59', fontFamily: 'monospace' }}>
+                  {formatTime(timeLeft)}
+                </div>
+                <div style={{ marginTop: '15px' }}>
+                  <button onClick={() => setIsTimerRunning(!isTimerRunning)} style={{ padding: '10px 20px', marginRight: '10px', backgroundColor: '#4a7c59', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '16px' }}>
+                    {isTimerRunning ? ui[lang].pause : ui[lang].start}
+                  </button>
+                  <button onClick={() => { setIsTimerRunning(false); setTimeLeft(600); }} style={{ padding: '10px 20px', backgroundColor: '#ccc', color: '#333', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '16px' }}>
+                    {ui[lang].reset}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* 影片移到計時器下方 */}
+            {steps[currentStep].video && (
+              <div style={{ marginTop: '15px', position: "relative", paddingBottom: "56.25%", height: 0, overflow: "hidden", borderRadius: "8px", boxShadow: '0 2px 5px rgba(0,0,0,0.1)' }}>
+                <iframe 
+                  src={steps[currentStep].video} 
+                  style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
+                  frameBorder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowFullScreen
+                ></iframe>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '30px' }}>
+              <button disabled={currentStep === 0} onClick={() => setCurrentStep(prev => prev - 1)} style={{ padding: '12px 20px', backgroundColor: currentStep === 0 ? '#f0f0f0' : '#4a7c59', color: currentStep === 0 ? '#aaa' : 'white', border: 'none', borderRadius: '6px', cursor: currentStep === 0 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}>
+                {ui[lang].prev}
+              </button>
+              <button disabled={currentStep === steps.length - 1} onClick={() => setCurrentStep(prev => prev + 1)} style={{ padding: '12px 20px', backgroundColor: currentStep === steps.length - 1 ? '#f0f0f0' : '#4a7c59', color: currentStep === steps.length - 1 ? '#aaa' : 'white', border: 'none', borderRadius: '6px', cursor: currentStep === steps.length - 1 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}>
+                {ui[lang].next}
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
